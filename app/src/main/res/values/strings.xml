@@ -1,0 +1,212 @@
+<resources>
+    <string name="app_name">CAB</string>
+    <string name="login">Login</string>
+    <string name="password">Password...</string>
+    <string name="email">Email...</string>
+    <string name="driver_login">Driver Login</string>
+
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="register">Register</string>
+    <string name="title_activity_driver_map">DriverMapActivity</string>
+    <string name="settings">Setting</string>
+
+    <string name="style_json">
+    [
+    {
+    \elementType\: \"geometry\",
+    \stylers\: [{\color\: \"#242f3e"\}]
+    },
+    {
+    \elementType\: \"labels.text.stroke\",
+    \stylers\: [{\color\: \"#242f3e"\}]
+    },
+    {
+    \elementType\: \"labels.text.fill\",
+    \stylers\: [{\color\: \"#746855"\}]
+    },
+    {
+    \"featureType\": \"all\",
+    \"elementType\": \"labels\",
+    \"stylers\": [
+    {
+    \"visibility\": \"on\"
+    }
+    ]
+    },
+    {
+    \"featureType\": \"administrative\",
+    \"elementType\": \"all\",
+    \"stylers\": [
+    {
+    \"visibility\": \"on\"
+    },
+    {
+    \"color\": \"#efebe2\"
+    }
+    ]
+    },
+    {
+    \"featureType\": \"landscape\",
+    \"elementType\": \"all\",
+    \"stylers\": [
+    {
+    \"color\": \"#efebe2\"
+    }
+    ]
+    },
+    {
+    \"featureType\": \"poi\",
+    \"elementType\": \"all\",
+    \"stylers\": [
+    {
+    \"color\": \"#efebe2\"
+    }
+    ]
+    },
+    {
+    \"featureType\": \"poi.attraction\",
+    \"elementType\": \"all\",
+    \"stylers\": [
+    {
+    \"color\": \"#efebe2\"
+    }
+    ]
+    },
+    {
+    \"featureType\": \"poi.business\",
+    \"elementType\": \"all\",
+    \"stylers\": [
+    {
+    \"color\": \"#efebe2\"
+    }
+    ]
+    },
+    {
+    \"featureType\": \"poi.government\",
+    \"elementType\": \"all\",
+    \"stylers\": [
+    {
+    \"color\": \"#dfdcd5\"
+    }
+    ]
+    },
+    {
+    \"featureType\": \"poi.medical\",
+    \"elementType\": \"all\",
+    \"stylers\": [
+    {
+    \"color\": \"#dfdcd5\"
+    }
+    ]
+    },
+    {
+    \"featureType\": \"poi.park\",
+    \"elementType\": \"all\",
+    \"stylers\": [
+    {
+    \"color\": \"#bad294\"
+    }
+    ]
+    },
+    {
+    \"featureType\": \"poi.place_of_worship\",
+    \"elementType\": \"all\",
+    \"stylers\": [
+    {
+    \"color\": \"#efebe2\"
+    }
+    ]
+    },
+    {
+    \"featureType\": \"poi.school\",
+    \"elementType\": \"all\",
+    \"stylers\": [
+    {
+    \"color\": \"#efebe2\"
+    }
+    ]
+    },
+    {
+    \"featureType\": \"poi.sports_complex\",
+    \"elementType\": \"all\",
+    \"stylers\": [
+    {
+    \"color\": \"#efebe2\"
+    }
+    ]
+    },
+    {
+    \"featureType\": \"road.highway\",
+    \"elementType\": \"geometry.fill\",
+    \"stylers\": [
+    {
+    \"color\": \"#ffffff\"
+    }
+    ]
+    },
+    {
+    \"featureType\": \"road.highway\",
+    \"elementType\": \"geometry.stroke\",
+    \"stylers\": [
+    {
+    \"visibility\": \"on\"
+    }
+    ]
+    },
+    {
+    \"featureType\": \"road.arterial\",
+    \"elementType\": \"geometry.fill\",
+    \"stylers\": [
+    {
+    \"color\": \"#ffffff\"
+    }
+    ]
+    },
+    {
+    \"featureType\": \"road.arterial\",
+    \"elementType\": \"geometry.stroke\",
+    \"stylers\": [
+    {
+    \"visibility\": \"on\"
+    }
+    ]
+    },
+    {
+    \"featureType\": \"road.local\",
+    \"elementType\": \"geometry.fill\",
+    \"stylers\": [
+    {
+    \"color\": \"#fbfbfb\"
+    }
+    ]
+    },
+    {
+    \"featureType\": \"road.local\",
+    \"elementType\": \"geometry.stroke\",
+    \"stylers\": [
+    {
+    \"visibility\": \"on\"
+    }
+    ]
+    },
+    {
+    \"featureType\": \"transit\",
+    \"elementType\": \"all\",
+    \"stylers\": [
+    {
+    \"visibility\": \"on\"
+    }
+    ]
+    },
+    {
+    \"featureType\": \"water\",
+    \"elementType\": \"all\",
+    \"stylers\": [
+    {
+    \"color\": \"#a5d7e0\"
+    }
+    ]
+    }
+    ]
+    </string>
+</resources>
