@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.onesignal.OneSignal;
 import com.taxitime.cab.R;
 import com.taxitime.cab.Validation;
 
@@ -92,7 +93,11 @@ public class CustomerLoginRegisterActivity extends AppCompatActivity
             }
         });
 
+        OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE);
 
+        // OneSignal Initialization
+        OneSignal.initWithContext(this);
+        OneSignal.setAppId("944a4906-1db8-49fb-b39f-227d168911ff");
         RegisterCustomerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
@@ -124,6 +129,11 @@ public class CustomerLoginRegisterActivity extends AppCompatActivity
                                 if(task.isSuccessful())
                                 {
                                     currentUserId = mAuth.getCurrentUser().getUid();
+                                    String userId=FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                    OneSignal.sendTag("User_ID",FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                    OneSignal.setEmail(  FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                                    FirebaseDatabase.getInstance().getReference().child("Users").child("Customers").child(userId).child("notificationKey").setValue(userId);
+
                                     customersDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Users").child("Customers").child(currentUserId);
                                     customersDatabaseRef.setValue(true);
 
@@ -180,7 +190,12 @@ public class CustomerLoginRegisterActivity extends AppCompatActivity
                         {
                             if(task.isSuccessful())
                             {
+
                                 Toast.makeText(CustomerLoginRegisterActivity.this, "Sign In , Successful...", Toast.LENGTH_SHORT).show();
+                                String userId=FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                OneSignal.sendTag("User_ID",FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                OneSignal.setEmail(  FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                                FirebaseDatabase.getInstance().getReference().child("Users").child("Customers").child(userId).child("notificationKey").setValue(userId);
 
                                 Intent intent = new Intent(CustomerLoginRegisterActivity.this, CustomersMapActivity.class);
                                 startActivity(intent);

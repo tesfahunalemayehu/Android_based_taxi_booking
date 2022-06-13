@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Looper;
 import android.os.PersistableBundle;
@@ -48,7 +49,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.taxitime.cab.Objects.LocationObject;
 import com.taxitime.cab.Objects.RideObject;
 import com.taxitime.cab.R;
-import com.taxitime.cab.SettingsActivity;
 import com.taxitime.cab.WelcomeActivity;
 
 import java.util.List;
@@ -86,7 +86,7 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
 
     private TextView txtName, txtPhone,txtCarName;
     private CircleImageView profilePic;
-    private ImageView  dProfileImage;
+    private ImageView  dProfileImage,mCallCustomer;
     private RelativeLayout relativeLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -107,6 +107,7 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
         txtPhone = findViewById(R.id.phone_customer);
         profilePic = findViewById(R.id.profile_image_customer);
         relativeLayout = findViewById(R.id.rel2);
+         mCallCustomer=(ImageView) findViewById(R.id.call_customer);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -117,9 +118,9 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
             @Override
             public void onClick(View view)
             {
-                Intent intent = new Intent(DriverMapActivity.this, SettingsActivity.class);
-                intent.putExtra("type", "Drivers");
+                Intent intent = new Intent(DriverMapActivity.this, DriversSettingActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
         dProfileImage=(ImageView)findViewById(R.id.profile_image_driver);
@@ -131,6 +132,22 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
                 DisconnectDriver();
                 mAuth.signOut();
                 LogOutUser();
+            }
+        });
+        mCallCustomer.setOnClickListener(view -> {
+            if(mCurrentRide==null){
+                Toast.makeText(DriverMapActivity.this, "Sorry driver has no Phone", Toast.LENGTH_LONG).show();
+            }
+
+            if(ContextCompat.checkSelfPermission(this,Manifest.permission.CALL_PHONE)
+                    ==PackageManager.PERMISSION_GRANTED){
+                Intent intent=new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+mCurrentRide.getCustomer().getPhone()));
+                startActivity(intent);
+
+            }
+            else {
+                Toast.makeText(DriverMapActivity.this, " You don't give phone call permission", Toast.LENGTH_LONG).show();
+
             }
         });
         getAssignedCustomersRequest();
@@ -145,14 +162,13 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
             {
                 if(dataSnapshot.exists())
                 {
-                    String name = dataSnapshot.child("DriverRideID").getValue().toString();
+                    String  name = dataSnapshot.child("DriverRideID").getValue().toString();
                     if (name.equals(driverID)){
                         customerID = dataSnapshot.child("CustomerRideID").getValue().toString();
                         makeSound();
                         GetAssignedCustomerPickupLocation();
                         relativeLayout.setVisibility(View.VISIBLE);
                         getAssignedCustomerInformation();
-                        //getting assigned customer location
                         ride_info=FirebaseDatabase.getInstance().getReference().child("BookedRide_Info")
                                 .child("CustomerRideID");
                     }
@@ -255,6 +271,7 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
                     ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mFusedLocationClient.requestLocationUpdates(locationRequest, mLocationCallback, Looper.myLooper());
                 mMap.setMyLocationEnabled(true);
+
             } else {
                 checkLocationPermission();
             }
@@ -269,6 +286,7 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
                 {
                     //getting the updated location
                     lastLocation = location;
+
 
                     LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));

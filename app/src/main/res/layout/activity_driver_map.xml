@@ -59,14 +59,40 @@
         android:textColor="#5E35B1"
         android:textSize="15sp"
         android:textStyle="bold" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="100dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="140dp"
+        android:background="@color/red"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/cancelBook"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_toRightOf="@+id/cancel"
+            android:text="Cancel"
+            android:textAllCaps="false"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+        <ImageView
+            android:id="@+id/cancel"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="Cancel"
+            android:layout_marginRight="30dp"
+            android:src="@drawable/cancel_button" />
 
 
+    </RelativeLayout>
     <RelativeLayout
         android:id="@+id/rel2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-
         android:layout_marginTop="10dp"
         android:background="@color/colorPrimaryDark"
         android:visibility="visible">
@@ -95,6 +121,7 @@
             android:textSize="16dp"
 
             android:textStyle="bold" />
+
         <TextView
             android:id="@+id/name_customer"
             android:layout_below="@+id/title"
@@ -122,13 +149,14 @@
             android:textStyle="bold" />
 
         <ImageView
+            android:id="@+id/call_customer"
             android:layout_width="40dp"
             android:layout_height="45dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:src="@drawable/phone"
-            android:tint="@android:color/black" />
+            android:tint="@android:color/white" />
 
     </RelativeLayout>
 

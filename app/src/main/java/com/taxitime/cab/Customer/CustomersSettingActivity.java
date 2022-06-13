@@ -1,4 +1,4 @@
-package com.taxitime.cab;
+package com.taxitime.cab.Customer;
 
 
 import android.app.Activity;
@@ -28,8 +28,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.bumptech.glide.Glide;
-import com.taxitime.cab.Customer.CustomersMapActivity;
-import com.taxitime.cab.Driver.DriverMapActivity;
+import com.taxitime.cab.CustomerObject;
+import com.taxitime.cab.R;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -37,11 +37,10 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class SettingsActivity extends AppCompatActivity
+public class CustomersSettingActivity extends AppCompatActivity
 {
-    private String getType;
 
-   private CircleImageView profileImageView;
+    private CircleImageView profileImageView;
     private EditText nameEditText, phoneEditText, driverCarName;
     private ImageView closeButton, saveButton;
     private TextView profileChangeBtn;
@@ -55,58 +54,42 @@ public class SettingsActivity extends AppCompatActivity
     private String myUrl = "";
     private StorageTask uploadTask;
     private StorageReference storageProfilePicsRef;
-String userId;
-CustomerObject mCustomer;
+    String userId;
+    CustomerObject mCustomer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.activity_customer_setting);
 
 
-        getType = getIntent().getStringExtra("type");
-        Toast.makeText(this, getType, Toast.LENGTH_SHORT).show();
-
-
+        Toast.makeText(this, "Customers", Toast.LENGTH_SHORT).show();
         mAuth = FirebaseAuth.getInstance();
         userId=mAuth.getCurrentUser().getUid();
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(getType);
-        storageProfilePicsRef = FirebaseStorage.getInstance().getReference().child("Profile Pictures");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child("Customers");
+        storageProfilePicsRef = FirebaseStorage.getInstance().getReference().child("gs://cabapp-553e7.appspot.com").child("profile_images");
         mCustomer=new CustomerObject(userId);
 
 
-       profileImageView = findViewById(R.id.profile_image);
+        profileImageView = findViewById(R.id.profile_image);
 
-        nameEditText = findViewById(R.id.name);
-        phoneEditText = findViewById(R.id.phone_number);
-
-        driverCarName = findViewById(R.id.driver_car_name);
-        if (getType.equals("Drivers"))
-        {
-            driverCarName.setVisibility(View.VISIBLE);
-        }
+        nameEditText = findViewById(R.id.customer_name);
+        phoneEditText = findViewById(R.id.customer_phone_number);
 
         closeButton = findViewById(R.id.close_button);
         saveButton = findViewById(R.id.save_button);
 
         profileChangeBtn = findViewById(R.id.change_picture_btn);
 
-
-
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
             {
-                if (getType.equals("Drivers"))
-                {
-                    startActivity(new Intent(SettingsActivity.this, DriverMapActivity.class));
+                    startActivity(new Intent(CustomersSettingActivity.this, CustomersMapActivity.class));
+                    finish();
                 }
-                else
-                {
-                    startActivity(new Intent(SettingsActivity.this, CustomersMapActivity.class));
-                }
-            }
+
         });
 
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -130,9 +113,9 @@ CustomerObject mCustomer;
             {
                 checker = "clicked";
 
-               Intent intent=new Intent(Intent.ACTION_PICK);
-               intent.setType("image/*");
-               startActivityForResult(intent,1);
+                Intent intent=new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent,1);
             }
         });
 
@@ -169,10 +152,6 @@ CustomerObject mCustomer;
         {
             Toast.makeText(this, "Please provide your phone number.", Toast.LENGTH_SHORT).show();
         }
-        else if (getType.equals("Drivers")  &&  TextUtils.isEmpty(driverCarName.getText().toString()))
-        {
-            Toast.makeText(this, "Please provide your car Name.", Toast.LENGTH_SHORT).show();
-        }
         else if (checker.equals("clicked"))
         {
             uploadProfilePicture();
@@ -202,20 +181,13 @@ CustomerObject mCustomer;
                 userMap.put("phone", phoneEditText.getText().toString());
                 userMap.put("image", newImage);
 
-                if (getType.equals("Drivers")) {
-                    userMap.put("car", driverCarName.getText().toString());
-                }
                 databaseReference.child(mAuth.getCurrentUser().getUid()).updateChildren(newImage);
                 progressDialog.dismiss();
-                if (getType.equals("Drivers"))
-                {
-                    startActivity(new Intent(SettingsActivity.this, DriverMapActivity.class));
-                }
-                else
-                {
-                    startActivity(new Intent(SettingsActivity.this, CustomersMapActivity.class));
-                }
-             finish();
+
+                    startActivity(new Intent(CustomersSettingActivity.this, CustomersMapActivity.class));
+                Toast.makeText(this, "Image is Saved.", Toast.LENGTH_SHORT).show();
+
+                finish();
             }).addOnFailureListener(exception->{
                 finish();
             }));
@@ -237,32 +209,16 @@ CustomerObject mCustomer;
         {
             Toast.makeText(this, "Please provide your phone number.", Toast.LENGTH_SHORT).show();
         }
-        else if (getType.equals("Drivers")  &&  TextUtils.isEmpty(driverCarName.getText().toString()))
-        {
-            Toast.makeText(this, "Please provide your car Name.", Toast.LENGTH_SHORT).show();
-        }
+
         else
         {
             HashMap<String, Object> userMap = new HashMap<>();
             userMap.put("uid", mAuth.getCurrentUser().getUid());
             userMap.put("name", nameEditText.getText().toString());
             userMap.put("phone", phoneEditText.getText().toString());
-
-            if (getType.equals("Drivers"))
-            {
-                userMap.put("car", driverCarName.getText().toString());
-            }
-
             databaseReference.child(mAuth.getCurrentUser().getUid()).updateChildren(userMap);
-
-            if (getType.equals("Drivers"))
-            {
-                startActivity(new Intent(SettingsActivity.this, DriverMapActivity.class));
-            }
-            else
-            {
-                startActivity(new Intent(SettingsActivity.this, CustomersMapActivity.class));
-            }
+            Toast.makeText(CustomersSettingActivity.this,"Thank you successfully updated your information",Toast.LENGTH_LONG);
+            startActivity(new Intent(CustomersSettingActivity.this, CustomersMapActivity.class));
         }
     }
 
@@ -276,18 +232,8 @@ CustomerObject mCustomer;
                 if (dataSnapshot.exists()  &&  dataSnapshot.getChildrenCount() > 0)
                 {
                     mCustomer.parseData(dataSnapshot);
-                    String name = dataSnapshot.child("name").getValue().toString();
-                    String phone = dataSnapshot.child("phone").getValue().toString();
-
-                    nameEditText.setText(name);
-                    phoneEditText.setText(phone);
-
-                    if (getType.equals("Drivers"))
-                    {
-                        String car = dataSnapshot.child("car").getValue().toString();
-                        driverCarName.setText(car);
-                    }
-
+                    nameEditText.setText(mCustomer.getName());
+                    phoneEditText.setText(mCustomer.getPhone());
 
                     if (!mCustomer.getProfileImage().equals("default"))
                     {

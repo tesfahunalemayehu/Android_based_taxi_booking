@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.taxitime.cab.SettingsActivity">
+    tools:context="com.taxitime.cab.Driver.DriversSettingActivity">
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar_settings"
         android:layout_width="match_parent"
@@ -24,10 +24,10 @@
                     android:id="@+id/close_button"
                     android:layout_width="30dp"
                     android:layout_height="40dp"
+                    android:contentDescription="close"
                     android:src="@drawable/close"
                     android:tint="@android:color/white"
-                    tools:ignore="UseAppTint"
-                    android:contentDescription="close"/>
+                    tools:ignore="UseAppTint" />
 
                 <ImageView
                     android:id="@+id/save_button"
@@ -47,19 +47,16 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
-
-
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:src="@drawable/profile"
-        app:civ_border_width="2dp"
-        app:civ_border_color="#c880ff"
         android:layout_below="@+id/app_bar_settings"
-        android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"
-        />
+        android:layout_marginTop="20dp"
+        android:src="@drawable/profile"
+        app:civ_border_color="#c880ff"
+        app:civ_border_width="2dp" />
 
 
     <TextView
@@ -74,31 +71,29 @@
         android:layout_marginTop="5dp"
         android:textColor="@color/colorPrimaryDark"
         />
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
-    android:id="@+id/new_name"
-    android:layout_below="@+id/change_picture_btn">
-    <com.google.android.material.textfield.TextInputLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:textColorHint="#cccccc">
-
-        <EditText
-            android:id="@+id/name"
+        android:layout_marginTop="10dp"
+        android:id="@+id/new_name"
+        android:layout_below="@+id/change_picture_btn">
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/colorPrimary"
-            android:hint="Write your name "
-            android:inputType="textPersonName"
-            android:textSize="20sp"
-            tools:ignore="SpeakableTextPresentCheck" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:textColorHint="#cccccc">
 
+            <EditText
+                android:id="@+id/customer_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorPrimary"
+                android:hint="Write your name "
+                android:inputType="textPersonName"
+                android:textSize="20sp"
+                tools:ignore="SpeakableTextPresentCheck" />
 
-</RelativeLayout>
+        </com.google.android.material.textfield.TextInputLayout>
+    </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -108,9 +103,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColorHint="#cccccc">
-
             <EditText
-                android:id="@+id/phone_number"
+                android:id="@+id/customer_phone_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/colorAccent"
@@ -119,21 +113,6 @@
                 android:inputType="number"
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
         </com.google.android.material.textfield.TextInputLayout>
+
     </RelativeLayout>
-    <EditText
-        android:id="@+id/driver_car_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableStart="@drawable/ic_car"
-        android:text="Model: "
-        android:hint="your Car Name"
-        android:layout_below="@+id/phone_number"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="15dp"
-        android:visibility="gone"
-        />
-
-
-
 </RelativeLayout>

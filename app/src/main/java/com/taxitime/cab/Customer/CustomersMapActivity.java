@@ -24,7 +24,6 @@ import android.widget.TextView;
 
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -41,7 +40,6 @@ import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -59,7 +57,6 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -73,7 +70,6 @@ import com.taxitime.cab.Objects.LocationObject;
 import com.taxitime.cab.Objects.RideObject;
 import com.taxitime.cab.R;
 import com.taxitime.cab.SendNotification;
-import com.taxitime.cab.SettingsActivity;
 import com.taxitime.cab.TypeAdapter;
 import com.taxitime.cab.WelcomeActivity;
 
@@ -122,10 +118,11 @@ public class CustomersMapActivity extends FragmentActivity implements OnMapReady
 
     private ValueEventListener DriverLocationRefListner;
 
-    private ImageView mCallDriver;
-    private TextView txtName, txtPhone, txtCarName;
+    private ImageView mCallDriver,cancel_Book;
+    private TextView txtName, txtPhone, txtCarName,cancel_book;
     private CircleImageView profilePic;
-    private RelativeLayout relativeLayout;
+    private RelativeLayout relativeLayout,relativeLayout1;
+     Boolean cancelBol=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,13 +142,16 @@ public class CustomersMapActivity extends FragmentActivity implements OnMapReady
         Logout = (Button) findViewById(R.id.logout_customer_btn);
         SettingsButton = (Button) findViewById(R.id.settings_customer_btn);
         CallCabCarButton =  (Button) findViewById(R.id.call_a_car_button);
-        mCallDriver=(ImageView)findViewById(R.id.call_driver);
+        mCallDriver=(ImageView) findViewById(R.id.call_driver);
         txtName = findViewById(R.id.name_driver);
         txtPhone = findViewById(R.id.phone_driver);
         txtCarName = findViewById(R.id.car_name_driver);
         profilePic = findViewById(R.id.profile_image_driver);
         relativeLayout = findViewById(R.id.rel1);
+        relativeLayout1 = findViewById(R.id.rel3);
         destin=(CardView)findViewById(R.id.dest);
+        cancel_Book=(ImageView)findViewById(R.id.cancel);
+        cancel_book=(TextView) findViewById(R.id.cancelBook);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -160,14 +160,11 @@ public class CustomersMapActivity extends FragmentActivity implements OnMapReady
 
         mapFragment.getMapAsync(this);
 
-
-
         SettingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
             {
-                Intent intent = new Intent(CustomersMapActivity.this, SettingsActivity.class);
-                intent.putExtra("type", "Customers");
+                Intent intent = new Intent(CustomersMapActivity.this, CustomersSettingActivity.class);
                 startActivity(intent);
             }
         });
@@ -181,10 +178,9 @@ public class CustomersMapActivity extends FragmentActivity implements OnMapReady
             }
         });
 
-        CallCabCarButton.setOnClickListener(new View.OnClickListener() {
+        cancel_book.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View view) {
                 if (requestType)
                 {
                     requestType = false;
@@ -193,13 +189,13 @@ public class CustomersMapActivity extends FragmentActivity implements OnMapReady
 
                     if (driverFound!=null)
                     {
-                        DriversRef = FirebaseDatabase.getInstance().getReference().child("BookedRide_Info")
-                                .child("CustomerRideID");
-                        cancelledDatabaseRef= FirebaseDatabase.getInstance().getReference().child("BookedRide_Info")
-                                .child("CustomerRideID");
+                        DriversRef = FirebaseDatabase.getInstance().getReference().child("BookedRide_Info");
                         DriversRef.removeValue();
                         driverFoundID = null;
                     }
+                    DriversRef = FirebaseDatabase.getInstance().getReference().child("BookedRide_Info");
+                    DriversRef.child("CustomerRideID").setValue("");
+                    DriversRef.removeValue();
                     driverFound = false;
                     radius = 1;
                     String customerId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -215,13 +211,62 @@ public class CustomersMapActivity extends FragmentActivity implements OnMapReady
                     {
                         DriverMarker.remove();
                     }
+                    CallCabCarButton.setText("Cancelling your booking...");
                     CallCabCarButton.setText("Call a Cab");
                     relativeLayout.setVisibility(View.GONE);
+                    relativeLayout1.setVisibility(View.GONE);
                     destin.setVisibility(View.VISIBLE);
                     destin.setEnabled(true);
                 }
-                else
+            }
+        });
+        cancel_Book.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (requestType)
                 {
+                    requestType = false;
+                    geoQuery.removeAllListeners();
+                    DriverLocationRef.removeEventListener(DriverLocationRefListner);
+
+                    if (driverFound!=null)
+                    {
+                        DriversRef = FirebaseDatabase.getInstance().getReference().child("BookedRide_Info")
+                                .child("CustomerRideID");
+                        DriversRef.removeValue();
+                        driverFoundID = null;
+                    }
+                    DriversRef = FirebaseDatabase.getInstance().getReference().child("BookedRide_Info");
+                    DriversRef.child("CustomerRideID").setValue("");
+                    driverFound = false;
+                    radius = 1;
+                    String customerId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    GeoFire geofire = new GeoFire(cancelledDatabaseRef);
+                    geofire.removeLocation(customerId);
+                    GeoFire geoFire = new GeoFire(CustomerDatabaseRef);
+                    geoFire.removeLocation(customerId);
+                    if (PickUpMarker != null)
+                    {
+                        PickUpMarker.remove();
+                    }
+                    if (DriverMarker != null)
+                    {
+                        DriverMarker.remove();
+                    }
+                    CallCabCarButton.setText("Cancelling your booking...");
+                    CallCabCarButton.setText("Call a Cab");
+                    relativeLayout.setVisibility(View.GONE);
+                    relativeLayout1.setVisibility(View.GONE);
+                    destin.setVisibility(View.VISIBLE);
+                    destin.setEnabled(true);
+                }
+            }
+        });
+        CallCabCarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+
                     requestType = true;
                     pickupLocation=currentLocation;
                     String customerId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -237,7 +282,7 @@ public class CustomersMapActivity extends FragmentActivity implements OnMapReady
                     MapAnimator();
                     CallCabCarButton.setText("Getting your Driver...");
                     getClosestDriverCab();
-                }
+
             }
         });
     }
@@ -358,6 +403,7 @@ public class CustomersMapActivity extends FragmentActivity implements OnMapReady
                             double LocationLng = 0;
                             CallCabCarButton.setText("Driver Found");
                             relativeLayout.setVisibility(View.VISIBLE);
+                            relativeLayout1.setVisibility(View.VISIBLE);
                             getAssignedDriverInformation();
                             if(driverLocationMap.get(0) != null)
                             {
@@ -478,7 +524,8 @@ public class CustomersMapActivity extends FragmentActivity implements OnMapReady
                     currentLocation=new LocationObject(latLng,address);
                     mCurrentRide.setCurrent(currentLocation);
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                    mMap.animateCamera(CameraUpdateFactory.zoomTo(12));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(17f));
+                    GettingDriverLocation();
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -540,6 +587,7 @@ public class CustomersMapActivity extends FragmentActivity implements OnMapReady
         startActivity(startPageIntent);
         finish();
     }
+    String notificationKey="";
     private void getAssignedDriverInformation()
     {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
@@ -565,9 +613,13 @@ public class CustomersMapActivity extends FragmentActivity implements OnMapReady
                                 .apply(RequestOptions.circleCropTransform())
                                 .into(profilePic);
                     }
+
+                    if(dataSnapshot.child("notificationKey").getValue().toString()!=null){
+                        notificationKey=dataSnapshot.child("notificationKey").getValue().toString();
+                    }
                     CustomerObject mCustomer=new CustomerObject();
                     String kk=mCustomer.getNotificationKey();
-                    new SendNotification("You have a customer waiting ","New Ride",driverFoundID);
+                    new SendNotification("You have a customer waiting ","New Ride",notificationKey);
                 }
             }
             @Override
@@ -576,14 +628,19 @@ public class CustomersMapActivity extends FragmentActivity implements OnMapReady
             }
         });
         mCallDriver.setOnClickListener(view -> {
+            if(mCurrentRide==null){
+                Toast.makeText(CustomersMapActivity.this, "Sorry driver has no Phone", Toast.LENGTH_LONG).show();
+            }
 
             if(ContextCompat.checkSelfPermission(this,Manifest.permission.CALL_PHONE)
                     ==PackageManager.PERMISSION_GRANTED){
-                Intent intent=new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+phone));
+                Intent intent=new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+mCurrentRide.getDriver().getPhone()));
+                startActivity(intent);
 
             }
             else {
-                Snackbar.make(findViewById(R.id.call_driver)," You don't give phone call permission",Snackbar.LENGTH_LONG).show();
+                Toast.makeText(CustomersMapActivity.this, " You don't give phone call permission", Toast.LENGTH_LONG).show();
+
             }
         });
     }

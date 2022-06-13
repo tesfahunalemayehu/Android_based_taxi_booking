@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.onesignal.OneSignal;
 import com.taxitime.cab.R;
 
 public class DriverLoginRegisterActivity extends AppCompatActivity
@@ -49,7 +50,11 @@ public class DriverLoginRegisterActivity extends AppCompatActivity
         setContentView(R.layout.activity_driver_login_register);
 
         mAuth = FirebaseAuth.getInstance();
+        OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE);
 
+        // OneSignal Initialization
+        OneSignal.initWithContext(this);
+        OneSignal.setAppId("944a4906-1db8-49fb-b39f-227d168911ff");
        firebaseAuthListner = new FirebaseAuth.AuthStateListener() {
            @Override
            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth)
@@ -123,6 +128,11 @@ public class DriverLoginRegisterActivity extends AppCompatActivity
                         {
                             if(task.isSuccessful())
                             {
+                                String userId=FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                OneSignal.sendTag("User_ID",FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                OneSignal.setEmail(  FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                                FirebaseDatabase.getInstance().getReference().child("Users").child("Drivers").child(userId).child("notificationKey").setValue(userId);
+
                                 Toast.makeText(DriverLoginRegisterActivity.this, "Thank you for choosing Us! Your registeration is successful... ", Toast.LENGTH_SHORT).show();
                                currentUserId = mAuth.getCurrentUser().getUid();
                                 driversDatabaseRef = FirebaseDatabase.getInstance().getReference().child("Users").child("Drivers").child(currentUserId);
@@ -171,6 +181,11 @@ public class DriverLoginRegisterActivity extends AppCompatActivity
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task)
                         {
+                            String userId=FirebaseAuth.getInstance().getCurrentUser().getUid();
+                            OneSignal.sendTag("User_ID",FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            OneSignal.setEmail(  FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                            FirebaseDatabase.getInstance().getReference().child("Users").child("Drivers").child(userId).child("notificationKey").setValue(userId);
+
                             if(task.isSuccessful())
                             {
                                 Toast.makeText(DriverLoginRegisterActivity.this, "Sign In , Successful...", Toast.LENGTH_SHORT).show();

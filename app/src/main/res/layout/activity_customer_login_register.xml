@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/logres"
-    tools:context="com.taxitime.cab.Customer.CustomerLoginRegisterActivity">
+    tools:context="com.taxitime.cab.Customer.CustomerLoginRegisterActivity"
+
+    >
 
     <TextView
         android:id="@+id/customer_status"
@@ -53,7 +55,7 @@
         android:layout_below="@+id/customer_password"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="12dp"
-        android:background="@color/colorAccent"
+        android:backgroundTint="@color/colorAccent"
         android:text="Login"
         android:textColor="#E64A19"
         android:textSize="20sp" />
@@ -65,8 +67,8 @@
         android:layout_below="@+id/customer_login_btn"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
+        android:backgroundTint="#ff0000"
         android:text="Don't have an Account ?"
-        android:textColor="@android:color/holo_red_dark"
         android:textSize="15sp" />
 
     <Button
@@ -76,7 +78,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/customer_register_link"
         android:layout_marginTop="11dp"
-        android:background="@android:color/holo_red_dark"
+        android:backgroundTint="#00ff00"
         android:text="Register"
         android:textColor="@android:color/background_light"
         android:textSize="20sp" />

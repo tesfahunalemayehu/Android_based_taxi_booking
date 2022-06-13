@@ -95,14 +95,15 @@
 
         <ImageView
             android:id="@+id/call_driver"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/phone_driver"
-            android:background="@color/white"
+            android:layout_width="40dp"
+            android:layout_height="45dp"
+            android:layout_toLeftOf="@+id/phone_driver"
             android:src="@drawable/phone"
-            android:tint="@android:color/black"
+            android:backgroundTint="#00ff00"
+            android:tint="@android:color/white"
             android:layout_alignParentEnd="true"
-            android:layout_marginRight="15dp"
+            android:layout_marginBottom="100dp"
+            android:layout_marginRight="10dp"
             android:layout_centerVertical="true"
             />
 
@@ -193,6 +194,35 @@
                 android:text="set" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+    <RelativeLayout
+        android:id="@+id/rel3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="190dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="140dp"
+        android:background="@color/red"
+        android:visibility="gone">
 
+        <TextView
+            android:id="@+id/cancelBook"
+            android:layout_width="70dp"
+            android:layout_height="50dp"
+            android:layout_toRightOf="@+id/cancel"
+            android:text="Cancel"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+        <ImageView
+            android:id="@+id/cancel"
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:contentDescription="Cancel"
+            android:layout_marginRight="25dp"
+            android:src="@drawable/cancel_button" />
+
+
+    </RelativeLayout>
 
 </RelativeLayout>
